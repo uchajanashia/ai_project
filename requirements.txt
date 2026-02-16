@@ -1,0 +1,8 @@
+fastapi
+openai
+qdrant-client
+pandas
+tiktoken
+python-dotenv
+uvicorn
+
