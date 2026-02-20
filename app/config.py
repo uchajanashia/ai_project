@@ -1,5 +1,8 @@
+import os
 from dataclasses import dataclass
 from functools import lru_cache
+
+from dotenv import load_dotenv
 
 @dataclass(frozen=True)
 class Settings:
@@ -20,13 +23,23 @@ class Settings:
     near_duplicate_threshold: float
 
 
+def _required_env(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(f"Missing required environment variable: {name}")
+    return value
+
+
+load_dotenv()
+
+
 DEFAULT_SETTINGS = Settings(
-    openai_api_key="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",
+    openai_api_key=_required_env("OPENAI_API_KEY"),
     openai_chat_model="gpt-4.1",
     openai_embedding_model="text-embedding-3-large",
-    qdrant_url="https://dde671cd-9d27-4bd6-815b-9783ac42dd78.sa-east-1-0.aws.cloud.qdrant.io:6333",
-    qdrant_api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.uiYQWuXXr_Y5JdODvDgUhT5PpqsBn6Wx312vSQRG9hA",
-    qdrant_collection="infohub_documents",
+    qdrant_url=_required_env("QDRANT_URL"),
+    qdrant_api_key=os.getenv("QDRANT_API_KEY"),
+    qdrant_collection=os.getenv("QDRANT_COLLECTION", "infohub_documents"),
     csv_path="data/infohub.csv",
     top_k=8,
     chunk_size_tokens=900,
