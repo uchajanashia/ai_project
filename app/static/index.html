@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfoHub Chat Demo</title>
+  <link rel="stylesheet" href="/static/chat.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="chat-card" aria-label="Chat">
+      <header class="chat-header">
+        <h1>InfoHub RAG Demo</h1>
+        <p>Minimal chat UI connected to <code>POST /ask</code></p>
+      </header>
+
+      <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+
+      <form id="chatForm" class="chat-input-row" autocomplete="off">
+        <textarea
+          id="chatInput"
+          placeholder="Type your question..."
+          rows="1"
+          required
+        ></textarea>
+        <button id="sendButton" type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="/static/chat.js" defer></script>
+</body>
+</html>

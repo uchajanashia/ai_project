@@ -11,6 +11,7 @@ class Settings:
     openai_chat_model: str
     openai_embedding_model: str
     qdrant_url: str
+    qdrant_api_key: str | None
     qdrant_collection: str
     csv_path: str
     top_k: int
@@ -42,7 +43,8 @@ def get_settings() -> Settings:
             "text-embedding-3-large",
         ).strip(),
         qdrant_url=os.getenv("QDRANT_URL", "http://localhost:6333").strip(),
-        qdrant_collection="infohub_documents",
+        qdrant_api_key=os.getenv("QDRANT_API_KEY", "").strip() or None,
+        qdrant_collection=os.getenv("QDRANT_COLLECTION", "infohub_documents").strip(),
         csv_path=os.getenv("CSV_PATH", "data/infohub.csv").strip(),
         top_k=8,
         chunk_size_tokens=900,

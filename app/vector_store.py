@@ -22,7 +22,10 @@ class RetrievedChunk:
 class QdrantVectorStore:
     def __init__(self, settings: Settings):
         self.collection_name = settings.qdrant_collection
-        self.client = QdrantClient(url=settings.qdrant_url)
+        client_kwargs: dict[str, str] = {"url": settings.qdrant_url}
+        if settings.qdrant_api_key:
+            client_kwargs["api_key"] = settings.qdrant_api_key
+        self.client = QdrantClient(**client_kwargs)
 
     def _get_vector_size(self, collection_name: str) -> int:
         details = self.client.get_collection(collection_name)

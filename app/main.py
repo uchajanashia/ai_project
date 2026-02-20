@@ -1,7 +1,10 @@
 import logging
 from functools import lru_cache
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.ingestion import ingest_documents
@@ -10,12 +13,20 @@ from app.rag_pipeline import RAGPipeline
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
 
 app = FastAPI(
     title="InfoHub Georgian Legal RAG API",
     version="3.0.0",
     description="Production-ready Georgian legal RAG system for tax and customs knowledge.",
 )
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.get("/", include_in_schema=False)
+def chat_ui() -> FileResponse:
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @lru_cache(maxsize=1)
@@ -74,4 +85,3 @@ def ask(payload: AskRequest) -> AskResponse:
     except Exception as error:
         logger.exception("Unhandled error in /ask")
         raise HTTPException(status_code=500, detail=f"Internal error: {error}") from error
-
