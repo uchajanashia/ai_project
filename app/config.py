@@ -21,7 +21,7 @@ class Settings:
 
 
 DEFAULT_SETTINGS = Settings(
-    openai_api_key="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",
+    openai_api_key="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",
     openai_chat_model="gpt-4.1",
     openai_embedding_model="text-embedding-3-large",
     qdrant_url="https://dde671cd-9d27-4bd6-815b-9783ac42dd78.sa-east-1-0.aws.cloud.qdrant.io:6333",
