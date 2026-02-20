@@ -1,9 +1,5 @@
-import os
 from dataclasses import dataclass
 from functools import lru_cache
-
-from dotenv import load_dotenv
-
 
 @dataclass(frozen=True)
 class Settings:
@@ -24,34 +20,25 @@ class Settings:
     near_duplicate_threshold: float
 
 
-def _required_env(name: str) -> str:
-    value = os.getenv(name)
-    if value is None or not value.strip():
-        raise ValueError(f"Missing required environment variable: {name}")
-    return value.strip()
+DEFAULT_SETTINGS = Settings(
+    openai_api_key="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",
+    openai_chat_model="gpt-4.1",
+    openai_embedding_model="text-embedding-3-large",
+    qdrant_url="https://dde671cd-9d27-4bd6-815b-9783ac42dd78.sa-east-1-0.aws.cloud.qdrant.io:6333",
+    qdrant_api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.uiYQWuXXr_Y5JdODvDgUhT5PpqsBn6Wx312vSQRG9hA",
+    qdrant_collection="infohub_documents",
+    csv_path="data/infohub.csv",
+    top_k=8,
+    chunk_size_tokens=900,
+    chunk_overlap_tokens=250,
+    embedding_batch_size=64,
+    temperature=0.2,
+    min_context_score=0.2,
+    conversation_history_size=5,
+    near_duplicate_threshold=0.92,
+)
 
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    load_dotenv()
-
-    return Settings(
-        openai_api_key=_required_env("OPENAI_API_KEY"),
-        openai_chat_model=os.getenv("OPENAI_CHAT_MODEL", "gpt-4.1").strip(),
-        openai_embedding_model=os.getenv(
-            "OPENAI_EMBEDDING_MODEL",
-            "text-embedding-3-large",
-        ).strip(),
-        qdrant_url=os.getenv("QDRANT_URL", "http://localhost:6333").strip(),
-        qdrant_api_key=os.getenv("QDRANT_API_KEY", "").strip() or None,
-        qdrant_collection=os.getenv("QDRANT_COLLECTION", "infohub_documents").strip(),
-        csv_path=os.getenv("CSV_PATH", "data/infohub.csv").strip(),
-        top_k=8,
-        chunk_size_tokens=900,
-        chunk_overlap_tokens=250,
-        embedding_batch_size=int(os.getenv("EMBEDDING_BATCH_SIZE", "64")),
-        temperature=0.2,
-        min_context_score=0.2,
-        conversation_history_size=5,
-        near_duplicate_threshold=float(os.getenv("NEAR_DUPLICATE_THRESHOLD", "0.92")),
-    )
+    return DEFAULT_SETTINGS
